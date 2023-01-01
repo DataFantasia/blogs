@@ -1,0 +1,34 @@
+use classicmodels;
+CREATE VIEW getOrders
+as 
+SELECT 
+  orders.orderNumber
+  ,quantityOrdered
+  , priceEach
+  ,orderDate
+  ,shippedDate
+  ,orders.status
+  ,customerName
+  , c.city as CustomerCity
+  ,c.state as CustomerState
+  ,c.country as CustomerCountry
+  ,creditLimit
+  ,concat(firstName,' ', lastName) as EmpName
+  ,jobTitle
+  ,o.state as OfficeState
+  ,o.country as OfficeCountry
+  ,productName
+  ,pr.productLine
+FROM orderdetails as detail
+left join orders 
+  on detail.orderNumber = orders.orderNumber
+left join customers as c
+  on orders.customerNumber=c.customerNumber
+left join employees as e
+  on c.salesRepEmployeeNumber=e.employeeNumber
+left join offices as o
+  on e.officeCode = o.officeCode
+left join products as pr
+  on pr.productCode = detail.productCode
+left join productlines as l
+  on l.productLine = pr.productLine
